@@ -164,3 +164,89 @@ La plataforma web ofrece diversas funcionalidades destacadas en la experiencia d
 
 ---
 
+
+# 🖥️ Proxmox
+
+## 🏗️ Imagen de la Arquitectura
+Nuestra arquitectura se basa en una red virtual, compuesta por un cliente (**MV CLIENTE**) que se conecta a Firebase a través de una máquina virtual que funciona como router (**MV ROUTER**) y un router físico conectado a Internet. Este enrutador tiene una dirección IP pública dinámica (100.77.20.X), permitiendo la conexión a Internet.
+
+**MV ROUTER** administra dos interfaces:
+- **VMBR0**: Interfaz externa con IP pública (100.77.20.120) conectada al router físico.
+- **VMBR1**: Interfaz interna con IP privada (10.20.40.1), que permite la comunicación local con el cliente (IP 10.20.40.2).
+
+Esta configuración de dos redes permite al cliente acceder a servicios externos, como Firebase, mediante una infraestructura combinada virtual y física. La estructura se implementa de la siguiente manera:
+
+![Arquitectura Proxmox](https://github.com/user-attachments/assets/fe519f3a-bd52-4966-bbc3-93b77aabf96b)
+
+---
+
+# 🌐 Router
+La incorporación de un router es fundamental para el proyecto, ya que permite conectar la red interna a Internet. Para lograr esto, configuramos dos adaptadores:
+1. Uno para conectar con una red que tenga acceso a Internet.
+2. Otro para la comunicación interna.
+
+Con **iptables**, habilitamos el reenvío de paquetes, permitiendo a los dispositivos de la red interna acceder a Internet a través del router.
+
+---
+
+# 📶 DHCP
+El servidor **DHCP** facilita la asignación de direcciones IP en la red de forma automática, simplificando la configuración. Al definir un rango de direcciones disponibles y configurar el tiempo de concesión, el servidor **DHCP** asegura que cada dispositivo reciba una IP única, evitando conflictos.
+
+---
+
+# ☁️ Firebase
+**Firebase Database** es una base de datos NoSQL en la nube, que almacena datos en formato JSON y sincroniza en tiempo real con los clientes conectados. Utilizamos Firebase para almacenar la base de datos, permitiendo consultas a través de scripts en formato JSON para la web.
+
+**Ventajas de Firebase**:
+- Sincronización en tiempo real.
+- Escalabilidad y estructura flexible.
+- Seguridad configurable y almacenamiento offline.
+
+Ideal para aplicaciones de chat, sistemas de gestión de contenido y juegos multijugador, ofreciendo una experiencia fluida incluso sin conexión a Internet.
+
+---
+
+# 🌐 DNS
+Un servidor **DNS** es crucial para la resolución de nombres de dominio, facilitando el acceso al proyecto web mediante nombres de dominio en lugar de direcciones IP. 
+
+**Funciones del DNS**:
+- Traduce nombres de dominio a IPs para mejorar la accesibilidad.
+- Ofrece redundancia, aumentando la disponibilidad.
+- Administra registros como A, CNAME y MX, esenciales para la configuración de correos y otros servicios.
+
+---
+
+# 🌐 NGINX (Web)
+**NGINX** es un servidor web y proxy inverso que gestiona solicitudes HTTP, balanceo de carga y terminación SSL. Su arquitectura asíncrona permite manejar múltiples conexiones simultáneamente, ideal para aplicaciones de alto tráfico.
+
+**Funciones de NGINX**:
+- Optimiza el rendimiento y reduce la latencia.
+- Se integra con bases de datos, servidores de aplicaciones y herramientas de caché.
+- Configura reglas de redirección, compresión de archivos y seguridad.
+
+En este proyecto, usamos **NGINX** para alojar el código de la web, permitiendo el acceso de usuarios remotos.
+
+---
+
+# 📂 FTP
+**FTP** es un protocolo fundamental para la transferencia de archivos entre cliente y servidor. Permite cargar y descargar archivos, facilitando la gestión de contenido en servidores web.
+
+**Ventajas de FTP**:
+- Simple y compatible con varios sistemas operativos.
+- Transferencia de archivos grandes y reanudación de cargas.
+- Seguridad mediante credenciales y la variante SFTP para cifrado de datos.
+
+FTP será utilizado para almacenar y gestionar archivos que los usuarios puedan descargar.
+
+---
+
+# ⚙️ Instalaciones
+
+## 🛠️ Instalación de Proxmox
+Aquí se encuentra la información sobre la instalación de **Proxmox** que hemos realizado en el proyecto.
+
+### 🔗 IP's de Proxmox (Interna y Externa)
+Estas son las IPs en los bridges de nuestra red. La interfaz **VMBR0** y **VMBR1** están configuradas en el router, mientras que solo **VMBR1** se usa en el cliente, definiendo así la red interna.
+
+![IPs Proxmox](https://github.com/user-attachments/assets/d3b779ba-4444-4fef-8b57-d859c45d2e1b)
+
